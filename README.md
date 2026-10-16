@@ -1,6 +1,6 @@
-# R3X Vision Autocar
+# Computer-Vision-Based Autonomous Vehicle Platform
 
-A camera-based autonomous black-line-following car built on a Wheeltec R3X Ackermann-steering chassis.
+A computer-vision-based autonomous vehicle platform built on a Wheeltec R3X Ackermann-steering chassis.
 
 ## October 2026 Goal
 Build a reliable car that uses an IMX219 camera on a Jetson Nano to detect a black lane, calculates lane-center error, sends steering commands to a Raspberry Pi Pico 2 over UART, steers the front wheels with the Wheeltec S20 servo, drives the two rear MG513X motors, and stops safely if the lane is lost or communication fails.
