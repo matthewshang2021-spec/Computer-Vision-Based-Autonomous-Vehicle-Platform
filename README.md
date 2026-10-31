@@ -1,16 +1,16 @@
-# Computer-Vision-Based Autonomous Vehicle Platform
+# Computer-Vision-Based Autonomous Vehicle
 
-A camera-based robotics project built on a Wheeltec R3X Ackermann-steering chassis. The current milestone connects black-line detection on a Jetson Nano to front-wheel steering through a Raspberry Pi Pico 2.
+A camera-based robotics project built on a Wheeltec R3X Ackermann-steering chassis. The current milestone connects black-lane tracking on a Jetson Nano to front-wheel steering through a Raspberry Pi Pico 2.
 
-The longer-term goal is low-speed line following with rear-motor control and verified stopping behavior when vision or communication fails.
+The longer-term goal is low-speed lane following with rear-motor control and verified stopping behavior when vision or communication fails.
 
 ## Current status
 
-The [build log](docs/build-log.md) records successful camera capture, black-line detection, line-center/error calculation, Jetson-to-Pico UART communication, and automatic front-wheel steering with the S20 servo.
+The [build log](docs/build-log.md) records successful camera capture, black-lane detection, lane-center/error calculation, Jetson-to-Pico UART communication, and automatic front-wheel steering with the S20 servo.
 
 The next documented milestone is rear-motor control through the D157B driver, beginning with the drive wheels lifted, followed by low-speed manual driving.
 
-The public repository currently contains Jetson camera, vision, UART, and steering scripts. Pico firmware and an integrated propulsion/line-following program are not yet included. Recorded trial results and demonstration media are also not yet included; the repeated-run target in the test plan is a goal, not a measured result.
+The public repository currently contains Jetson camera, vision, UART, and steering scripts. Pico firmware and an integrated propulsion/lane-following program are not yet included. Recorded trial results and demonstration media are also not yet included; the repeated-run target in the test plan is a goal, not a measured result.
 
 ## System overview
 
@@ -19,7 +19,7 @@ IMX219 camera
     |
     v
 Jetson Nano
-  capture image -> detect black line -> calculate horizontal error
+  capture image -> detect black lane -> calculate horizontal error
   -> calculate proportional steering command
     |
     | UART: 115200 baud in the steering script
@@ -46,7 +46,7 @@ See [architecture](docs/architecture.md) and [wiring](docs/wiring.md) for the do
 
 Negative error means the detected line is left of image center; positive error means it is right. The documented command convention is negative for left and positive for right. The relationship between command values and physical wheel angles still needs calibration documentation.
 
-When no line is detected, this script sends `STEER 0`. This centers steering; it does not issue a motor `STOP` command. The serial request/reply operation blocks, so the configured camera frame rate does not establish the actual control-loop rate.
+When no lane is detected, this script sends `STEER 0`. This centers steering; it does not issue a motor `STOP` command. The serial request/reply operation blocks, so the configured camera frame rate does not establish the actual control-loop rate.
 
 This approach uses classical image processing and proportional control. A separate Canny/Hough lane-boundary experiment is included in `lane_detection_test.py`.
 
@@ -101,7 +101,7 @@ Follow the [staged test plan](docs/test-plan.md):
 2. Verify low-speed manual driving and steering.
 3. Integrate vision steering with fixed low-speed propulsion.
 4. Evaluate curves while changing one tuning parameter at a time.
-5. Verify line-loss stopping, communication timeout, and repeated-run reliability.
+5. Verify lane-loss stopping, communication timeout, and repeated-run reliability.
 
 Before moving trials, verify motor-off startup and stopping behavior with the installed Pico firmware. For each trial, record the software version, track and lighting conditions, settings, outcome, and failures. The existing target is at least 8 successful runs out of 10 on the same track; success criteria and measured outcomes remain to be documented.
 
